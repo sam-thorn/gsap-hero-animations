@@ -10,7 +10,7 @@ import imgBoy from "./images/boy.webp";
 function App() {
   let app = useRef(null);
   let images = useRef(null);
-
+  let content = useRef(null);
   let tl = gsap.timeline();
 
   useEffect(() => {
@@ -18,28 +18,45 @@ function App() {
     const girlImage = images.firstElementChild;
     const boyImage = images.lastElementChild;
 
-    gsap.to(app, { duration: 0, css: { visibility: "visible" } });
+    //  Content Vars
+    const headlineFirst = content.children[0].children[0];
+    const headlineSecond = headlineFirst.nextSibling;
+    const headlineThird = headlineSecond.nextSibling;
+    const contentP = content.children[1];
+    const contentButton = content.children[2];
 
+    // Remove initial flash
+    gsap.to(app, { duration: 0, css: { visibility: "visible" } });
+    // Images animation
     tl.from(girlImage, { duration: 1.2, y: 1280, ease: Power3.easeOut })
-      .from(
-        girlImage.firstElementChild,
-        { duration: 2, scale: 1.6, ease: Power3.easeOut },
-        0.2
-      )
-      .from(boyImage, { duration: 1.2, y: 1280, ease: Power3.easeOut }, 0.2)
-      .from(
-        boyImage.firstElementChild,
-        { duration: 2, scale: 1.6, ease: Power3.easeOut },
-        0.2
-      );
-  });
+      .from(girlImage.firstElementChild, {
+        duration: 2,
+        scale: 1.6,
+        ease: Power3.easeOut,
+        delay: 0.2,
+      })
+      .from(boyImage, {
+        duration: 1.2,
+        y: 1280,
+        ease: Power3.easeOut,
+        delay: 0.2,
+      })
+      .from(boyImage.firstElementChild, {
+        duration: 2,
+        scale: 1.6,
+        ease: Power3.easeOut,
+        delay: 0.2,
+      });
+
+    //  Content animation
+  }, [tl]);
 
   return (
     <div className="hero" ref={(el) => (app = el)}>
       <div className="container">
         <div className="hero-inner">
           <div className="hero-content">
-            <div className="hero-content-inner">
+            <div className="hero-content-inner" ref={(el) => (content = el)}>
               <h1>
                 <div className="hero-content-line">
                   <div className="hero-content-line-inner">
